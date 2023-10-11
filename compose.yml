@@ -7,9 +7,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=lordran
-      - POSTGRES_PASSWORD=lordran
-      - POSTGRES_DB=mobiles_db
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - 5433:5432
 
@@ -19,8 +19,8 @@ services:
     container_name: pgadmin_express
     image: dpage/pgadmin4:6.17
     environment:
-      - PGADMIN_DEFAULT_EMAIL=lordran@lordran.dev
-      - PGADMIN_DEFAULT_PASSWORD=lordranpass
+      - PGADMIN_DEFAULT_EMAIL=${PG_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PG_PASSWORD}
     ports:
       - 80:80
 
