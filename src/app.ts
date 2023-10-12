@@ -1,17 +1,16 @@
-import express from 'express'
-import LoginRouter from './roots/login'
+import express, { Application, Request, Response } from 'express';
+import { PrismaClient } from "@prisma/client";
+import userController from 'controllers/user.controller';
+import interestController from 'controllers/interest.controller';
 
-const app = express()
-const PORT = 3000
+const app: Application = express();
+const port = process.env.PORT || 3000;
 
-app.use(express.json())
+app.use(express.json());
 
-app.get('/', (_req, res) => {
-  res.send("Hello I'm the server")
-})
+app.use('/user', userController)
+app.use('/interest', interestController)
 
-app.use('/api/login',  LoginRouter)
-
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`)
-}) 
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, Express with TypeScript and Prisma!');
+});
