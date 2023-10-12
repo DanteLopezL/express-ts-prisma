@@ -1,8 +1,8 @@
 {
-  "name": "hello-prisma",
+  "name": "express-ts-prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/app.ts",
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
+    "bcrypt": "^5.1.1",
     "express": "^4.18.2"
   }
 }
