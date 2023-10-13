@@ -13,6 +13,7 @@ export const createUser = async (req : Request , res : Response) => {
         res.status(201).json({data: user})
     } catch (e) {
         console.log(e);
+        res.status(500).json({ error: 'Failed to create user due to ' + e });
     }
 }
 
@@ -24,6 +25,7 @@ export const getAllUsers = async ( req : Request , res : Response ) => {
         res.status(200).json({data : allUsers})
     } catch (e) {
         console.log(e)
+        res.status(500).json({ error: 'Failed to get users due to ' + e });
     }
 }
 
@@ -39,6 +41,7 @@ export const getUserById = async (req :Request, res : Response) => {
         res.status(201).json({data: user})
     } catch (e) {
         console.log(e)
+        res.status(500).json({ error: 'Failed to get user due to ' + e });
     }
 }
 
@@ -57,6 +60,7 @@ export const updateUser = async ( req :Request, res : Response ) => {
         res.status(201).json({data: user})
     } catch (e) {
         log(e)
+        res.status(500).json({ error: 'Failed to update user due to ' + e });
     }
 }
 
@@ -72,5 +76,6 @@ export const deleteUser = async ( req :Request, res : Response ) => {
         res.status(201).json({data: user})
     } catch (e) {
         log(e)
+        res.status(500).json({ error: 'Failed to delete user due to ' + e });
     }
 }
