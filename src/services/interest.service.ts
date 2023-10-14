@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 const interestClient = new PrismaClient().user
 
-export const createInterest = async (req : Request , res : Response) => {
+const createInterest = async (req : Request , res : Response) => {
     try {
         const interestData = req.body
         const interest = await interestClient.create({
@@ -45,7 +45,7 @@ export const getInterestById = async (req :Request, res : Response) => {
     }
 }
 
-export const updateInterest = async ( req :Request, res : Response ) => {
+const updateInterest = async ( req :Request, res : Response ) => {
     try {
         const userId = req.params.id
         const userIdNumber : number = +userId
@@ -64,7 +64,7 @@ export const updateInterest = async ( req :Request, res : Response ) => {
     }
 }
 
-export const deleteInterest = async ( req :Request, res : Response ) => {
+const deleteInterest = async ( req :Request, res : Response ) => {
     try {
         const userId = req.params.id
         const userIdNumber : number = +userId
