@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllInterests, getInterestById, } from "services/interest.service";
+import { getAllInterests, getInterestById, } from "../services/interest.service";
 
 const interestController = Router()
 
