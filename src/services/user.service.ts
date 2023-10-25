@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { log } from "console";
 import { Request, Response, Router } from "express";
 
@@ -6,7 +6,7 @@ const userClient = new PrismaClient().user
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const userData = req.body
+        const userData: User = req.body
         const user = await userClient.create({
             data: userData
         })
@@ -19,7 +19,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const allUsers = await userClient.findMany({
+        const allUsers : User[] = await userClient.findMany({
 
         })
         res.status(200).json({ data: allUsers })
@@ -33,7 +33,7 @@ export const getUserById = async (req: Request, res: Response) => {
     try {
         const userId = req.params.id
         const userIdNumber: number = +userId
-        const user = await userClient.findUnique({
+        const user: User = await userClient.findUnique({
             where: {
                 id: userIdNumber
             }
@@ -47,13 +47,12 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id
-        const userIdNumber: number = +userId
-        const userData = req.body
+        const userData: User = req.body
+        const userId = userData.id
 
         const user = await userClient.update({
             where: {
-                id: userIdNumber
+                id: userId
             },
             data: userData
         })
@@ -66,11 +65,11 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id
-        const userIdNumber: number = +userId
+        const userData: User = req.body
+        const userId = userData.id
         const user = await userClient.delete({
             where: {
-                id: userIdNumber
+                id: userId
             }
         })
         res.status(201).json({ data: user })
@@ -82,15 +81,15 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const updateUserName = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
-        const newUsername = req.body.username;
+        const userData : User = req.body
+        const newUsername = userData.username
 
         if (!newUsername) {
             return res.status(400).json({ error: 'New username not provided' });
         }
 
         const user = await userClient.update({
-            where: { id: Number(userId) },
+            where: { id: Number(userData.id) },
             data: { username: newUsername },
         });
 
