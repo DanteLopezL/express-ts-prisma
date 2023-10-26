@@ -13,3 +13,7 @@ app.use('/interest', interestController)
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, Express with TypeScript and Prisma!');
 });
+
+app.listen(port, ()=>{
+  console.log('si jala en el puerto ' + port)
+})
