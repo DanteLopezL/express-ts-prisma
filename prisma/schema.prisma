@@ -16,7 +16,7 @@ model User {
   password String
   description String
   interests Interest[]
-  profilePic String
+  profilePic String?
   createdAt DateTime @default(now())
 }
 
