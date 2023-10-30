@@ -4,19 +4,6 @@ import { Request, Response } from "express";
 
 const interestClient = new PrismaClient().user
 
-const createInterest = async (req : Request , res : Response) => {
-    try {
-        const interestData = req.body
-        const interest = await interestClient.create({
-            data : interestData
-        })
-        res.status(201).json({data: interest})
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: 'Failed to create interest due to ' + e });
-    }
-}
-
 export const getAllInterests = async ( req : Request , res : Response ) => {
     try {
         const allUsers = await interestClient.findMany({
@@ -42,6 +29,19 @@ export const getInterestById = async (req :Request, res : Response) => {
     } catch (e) {
         console.log(e)
         res.status(500).json({ error: 'Failed to get interest due to ' + e });
+    }
+}
+
+const createInterest = async (req : Request , res : Response) => {
+    try {
+        const interestData = req.body
+        const interest = await interestClient.create({
+            data : interestData
+        })
+        res.status(201).json({data: interest})
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ error: 'Failed to create interest due to ' + e });
     }
 }
 
