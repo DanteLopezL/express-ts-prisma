@@ -3,6 +3,7 @@ import { log } from "console";
 import { Request, Response, Router } from "express";
 
 const userClient = new PrismaClient().user
+const interestClient = new PrismaClient().interest
 
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -102,3 +103,22 @@ export const updateUserName = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed to update username due to ' + e });
     }
 }
+
+export const addInterestToUser = async (userId: number, interestId: number) => {
+    const interest = await interestClient.findUnique({
+      where: { id: interestId },
+    });
+  
+    if (!interest) {
+      throw new Error(`Interest: ${interest} not found`);
+    }
+  
+    await userClient.update({
+      where: { id: userId },
+      data: {
+        interests: {
+          connect: { id: interest.id },
+        },
+      },
+    });
+  }
