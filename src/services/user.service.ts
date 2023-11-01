@@ -1,6 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import { log } from "console";
 import { Request, Response, Router } from "express";
+import upload from "middleware/uploads";
 
 const userClient = new PrismaClient().user
 
@@ -19,7 +20,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const allUsers : User[] = await userClient.findMany({
+        const allUsers: User[] = await userClient.findMany({
 
         })
         res.status(200).json({ data: allUsers })
@@ -81,7 +82,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const updateUserName = async (req: Request, res: Response) => {
     try {
-        const userData : User = req.body
+        const userData: User = req.body
         const newUsername = userData.username
 
         if (!newUsername) {
@@ -102,3 +103,16 @@ export const updateUserName = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed to update username due to ' + e });
     }
 }
+
+// app.post('/upload-profile-pic', upload.single('profilePic'), (req: Request, res: Response) => {
+//     if (req.file) {
+//       // Successfully uploaded the profile picture
+//       const profilePicPath = req.file.path;
+//       // You can now save the 'profilePicPath' in your database for the user
+//       // and send a response to the client.
+//       res.json({ message: 'Profile picture uploaded successfully', path: profilePicPath });
+//     } else {
+//       // Handle the case where the file upload failed
+//       res.status(400).json({ error: 'Failed to upload profile picture' });
+//     }
+//   });
