@@ -1,8 +1,42 @@
-import { PrismaClient } from "@prisma/client";
+import { Interest, PrismaClient } from "@prisma/client";
 import { log } from "console";
 import { Request, Response } from "express";
 
-const interestClient = new PrismaClient().user
+const interestClient = new PrismaClient().interest
+
+export const tryCreateInterest = async (interestData: Interest): Promise<Boolean> => {
+    try {
+
+        const match = await interestClient.findFirst({where: {name: interestData.name}})
+
+        if (match != undefined) {
+            return false
+        }
+
+        await interestClient.create({
+            data: interestData
+        })
+        return true
+    } catch (e) {
+        console.log(e);
+    }
+    return false
+}
+
+export const tryCreateInterests = async (interests: Interest[]): Promise<Boolean> => {
+    
+    if (interests != undefined) {
+
+        for (let interest of interests) {
+
+            if (!await tryCreateInterest(interest)) return false;
+
+        }
+    
+    }
+    
+    return false;
+}
 
 export const getAllInterests = async ( req : Request , res : Response ) => {
     try {
