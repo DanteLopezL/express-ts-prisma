@@ -6,16 +6,23 @@ const userClient = new PrismaClient().user
 const interestClient = new PrismaClient().interest
 
 export const createUser = async (req: Request, res: Response) => {
-    try {
-        const userData: User = req.body
-        const user = await userClient.create({
-            data: userData
-        })
-        res.status(201).json({ data: user })
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: 'Failed to create user due to ' + e });
-    }
+    
+    const givenUser = req.body
+    console.log(`Data given by ${req.ip} : ${JSON.stringify(givenUser)}`)
+    res.status(200).json({message: "ok"})
+
+    // Haciendo pruebas
+    
+    // try {
+    //     const userData: User = req.body
+    //     const user = await userClient.create({
+    //         data: userData
+    //     })
+    //     res.status(201).json({ data: user })
+    // } catch (e) {
+    //     console.log(e);
+    //     res.status(500).json({ error: 'Failed to create user due to ' + e });
+    // }
 }
 
 export const getAllUsers = async (req: Request, res: Response) => {
