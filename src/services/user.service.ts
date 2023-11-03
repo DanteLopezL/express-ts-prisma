@@ -8,8 +8,13 @@ const interestClient = new PrismaClient().interest
 export const createUser = async (req: Request, res: Response) => {
     
     const givenUser = req.body
+
+    const matchedUser = userClient.findFirst({where: { username: givenUser.username  }})
+
+    if (matchedUser === null) return res.status(500).json({ error: 'Failed to create user due to an existing user with the same username' }); 
+
     console.log(`Data given by ${req.ip} : ${JSON.stringify(givenUser)}`)
-    res.status(200).json({message: "ok"})
+    res.status(201).json({message: "ok"})
 
     // Haciendo pruebas
     
