@@ -1,21 +1,34 @@
 import { PrismaClient, User } from "@prisma/client";
+import { UserDtoIn } from "DTO/UserDtoIn";
 import { log } from "console";
 import { Request, Response, Router } from "express";
 
 const userClient = new PrismaClient().user
 const interestClient = new PrismaClient().interest
+const defaultProfileImage = '/images/profile_pics/default_profile_img.jpg'
 
 export const createUser = async (req: Request, res: Response) => {
-    try {
-        const userData: User = req.body
-        const user = await userClient.create({
-            data: userData
-        })
-        res.status(201).json({ data: user })
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: 'Failed to create user due to ' + e });
+    const givenUser: User = req.body
+    const matchedUser = userClient.findFirst({where: { username: givenUser.username  }})
+
+    if (matchedUser === null){
+        return res.status(400).json({ error: 'Failed to create user due to an existing user with the same username' }); 
     }
+
+    givenUser.profilePic = defaultProfileImage;
+
+    console.log(`Data given by ${req.ip} : ${JSON.stringify(givenUser)}`)
+
+    try {
+        await userClient.create({data: givenUser})
+        console.log("Created...")
+        return res.status(201).json({message: "ok", data: await userClient.findFirst({where: {email: givenUser.email}})})
+    } catch (e) {
+        const msg = `Couldn't create this user due to: ${e}`
+        console.error(msg)
+        return res.status(400).json({error: msg})
+    }
+
 }
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -23,7 +36,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         const allUsers : User[] = await userClient.findMany({
 
         })
-        res.status(200).json({ data: allUsers })
+        res.status(200).json(allUsers)
     } catch (e) {
         console.log(e)
         res.status(500).json({ error: 'Failed to get users due to ' + e });

@@ -43,6 +43,9 @@ export const getAllInterests = async ( req : Request , res : Response ) => {
         const allUsers = await interestClient.findMany({
 
         })
+
+        console.log(`We're giving to ${req.ip} this info:\n\t [${allUsers.map(user => `{ ${user.id} : ${user.name} }`)}]`);
+
         res.status(200).json({data : allUsers})
     } catch (e) {
         console.log(e)
