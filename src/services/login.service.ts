@@ -8,12 +8,10 @@ export const loginNow = async (req: Request, res: Response) => {
     const credentials: LoginUserDTO = req.body;
     console.log(JSON.stringify(credentials))
 
-    const match = await userClient.findUnique({
-        where: {
-            username: credentials.username,
-            password: credentials.password
-        }
-    })
+    const match = await userClient.findUnique({where: {
+        username: credentials.username,
+        password: credentials.password
+    }})
 
     if (match === null) return res.status(400).json({
         "err": "invalidCredentials"
