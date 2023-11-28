@@ -5,6 +5,7 @@ import { Comment, Room } from "interfaces/Room.interface";
 
 const mapController = Router()
 const interestClient = new PrismaClient().interest
+let lastUpdate = new Date(Date.now())
 
 // Rectoria xd
 const origin: Point = {
@@ -44,12 +45,21 @@ async function makePoints(quantity: number, rangeInMeters: number, startAt: Poin
         
     }
 
+    console.log(lastUpdate)
+
 }
 
 mapController.get('/points' , async (req, res) => {
     const interest: Interest = req.body
-    if (points.length === 0) {
+    const now = new Date(Date.now());
+    let diff = (now.getTime() - lastUpdate.getTime()) / 1000
+    diff /= (60 * 60)
+    const roundedDiff = Math.abs(Math.round(diff))
+
+    console.log(lastUpdate, now)
+    if (points.length === 0 || roundedDiff >= 12) {
         await makePoints(400, 10000, origin)
+        lastUpdate = new Date(Date.now())
     }
 
     console.log("Giving points...")
@@ -65,6 +75,8 @@ mapController.post('/comment/:roomId', async (req, res) => {
     if (comment) {
         const room = rooms.find(r => r.id === roomId)
         const roomIndex = rooms.findIndex(r => r.id === roomId)
+        const newId = room.comments.length + 1
+        comment.id = newId
         comment.postedAt = new Date().toLocaleTimeString()   
         if (room) {
             rooms[roomIndex].comments.push(comment)
@@ -73,5 +85,15 @@ mapController.post('/comment/:roomId', async (req, res) => {
     }
     return res.status(400).json({message: 'No data given!'})
 })
+
+mapController.get('/comment/:roomId', async (req, res) => {
+    const roomId: number = parseInt(req.params.roomId)
+    const comments = rooms.find(r => r.id === roomId).comments
+    if (comments !== undefined) {
+        return res.status(200).json(comments)
+    }
+    return res.status(404).json({err: `The room ${roomId} was not found`})
+})
+
 
 export default mapController

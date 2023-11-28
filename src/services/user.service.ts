@@ -61,16 +61,31 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const userData: User = req.body
-        const userId = userData.id
+        const userData: UserDtoIn = req.body
+        const userId = parseInt(req.params.id)
 
-        const user = await userClient.update({
+        const matchingUser = await userClient.findUnique({
             where: {
-                id: userId
-            },
-            data: userData
+                id: userId,
+                username: userData.username
+            }
         })
-        res.status(201).json({ data: user })
+
+        if (matchingUser != null) {
+            const updatedUser = await userClient.update({
+                where: {
+                    id: matchingUser.id
+                },
+                data: {
+                    username: userData.username,
+                    description: userData.description,
+                    profilePic: userData.profilePic
+                }
+            })
+            return res.status(201).json({data: updatedUser});
+        }
+
+        res.status(400).json({ error: 'No matching user' })
     } catch (e) {
         log(e)
         res.status(500).json({ error: 'Failed to update user due to ' + e });
