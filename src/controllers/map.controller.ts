@@ -25,7 +25,7 @@ async function makePoints(quantity: number, rangeInMeters: number, startAt: Poin
         randomY *= Math.pow(10, -5)
         
         const length = await interestClient.count()
-        const selectedIndex = Math.round(Math.random() * Number(length))
+        const selectedIndex = Math.floor(Math.random() * Number(length))
         const interests = await interestClient.findMany()
         const selectedInterest = interests.at(selectedIndex)
         
@@ -41,8 +41,9 @@ async function makePoints(quantity: number, rangeInMeters: number, startAt: Poin
             interest: selectedInterest,
             comments: []
         })
-
+        
     }
+
 }
 
 mapController.get('/points' , async (req, res) => {
@@ -51,9 +52,11 @@ mapController.get('/points' , async (req, res) => {
         await makePoints(400, 10000, origin)
     }
 
-    if (interest) return res.status(201).json({markers: points.filter(m => m.interest === interest)})
+    console.log("Giving points...")
 
-    res.status(201).json({markers: points}) 
+    if (interest.id != undefined) return res.status(201).json({markers: points.filter(m => m.interest === interest)})
+
+    return res.status(201).json({markers: points}) 
 })
 
 mapController.post('/comment/:roomId', async (req, res) => {
