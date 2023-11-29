@@ -1,5 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { UserDtoIn } from "DTO/UserDtoIn";
+import UserDtoOut from "DTO/UserDtoOut";
 import UserDtoUpdate from "DTO/UserDtoUpdate"
 import { log } from "console";
 import { Request, Response, Router } from "express";
@@ -53,7 +54,15 @@ export const getUserById = async (req: Request, res: Response) => {
                 id: userIdNumber
             }
         })
-        res.status(201).json({ data: user })
+
+        let userOut: UserDtoOut = {
+            id: user.id,
+            username: user.username,
+            description: user.description,
+            profilePic: user.profilePic
+        }
+
+        res.status(201).json({ data: userOut })
     } catch (e) {
         console.log(e)
         res.status(500).json({ error: 'Failed to get user due to ' + e });
