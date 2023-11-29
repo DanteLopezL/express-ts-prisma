@@ -1,5 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { UserDtoIn } from "DTO/UserDtoIn";
+import UserDtoUpdate from "DTO/UserDtoUpdate"
 import { log } from "console";
 import { Request, Response, Router } from "express";
 
@@ -61,7 +62,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const userData: UserDtoIn = req.body
+        const userData: UserDtoUpdate = req.body
         const userId = parseInt(req.params.id)
 
         const matchingUser = await userClient.findUnique({

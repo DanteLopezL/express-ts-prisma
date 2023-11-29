@@ -88,9 +88,9 @@ mapController.post('/comment/:roomId', async (req, res) => {
 
 mapController.get('/comment/:roomId', async (req, res) => {
     const roomId: number = parseInt(req.params.roomId)
-    const comments = rooms.find(r => r.id === roomId).comments
-    if (comments !== undefined) {
-        return res.status(200).json(comments)
+    const matchedRoom = rooms.find(r => r.id === roomId)
+    if (matchedRoom !== undefined) {
+        return res.status(200).json(matchedRoom.comments)
     }
     return res.status(404).json({err: `The room ${roomId} was not found`})
 })
