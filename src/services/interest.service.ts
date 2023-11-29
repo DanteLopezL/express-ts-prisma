@@ -27,7 +27,6 @@ export const tryCreateInterests = async (interests: Interest[]): Promise<Boolean
 
     for (let i = 0; i < interests.length; i++) {
         if (!await tryCreateInterest(interests[i])) return false;
-    
     }
     
     return false;
