@@ -1,7 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
-import { UserDtoIn } from "DTO/UserDtoIn";
 import UserDtoOut from "DTO/UserDtoOut";
-import UserDtoUpdate from "DTO/UserDtoUpdate"
+import UserDtoUpdate from "DTO/UserDTOUpdate"
 import { log } from "console";
 import { Request, Response, Router } from "express";
 
