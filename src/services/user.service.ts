@@ -1,5 +1,9 @@
 import { PrismaClient, User } from "@prisma/client";
-import { Request, Response } from "express";
+import { UserDtoIn } from "DTO/UserDtoIn";
+import UserDtoOut from "DTO/UserDtoOut";
+import UserDtoUpdate from "DTO/UserDTOUpdate"
+import { log } from "console";
+import { Request, Response, Router } from "express";
 
 const userClient = new PrismaClient().user
 const interestClient = new PrismaClient().interest
@@ -50,7 +54,15 @@ export const getUserById = async (req: Request, res: Response) => {
                 id: userIdNumber
             }
         })
-        res.status(201).json({ data: user })
+
+        let userOut: UserDtoOut = {
+            id: user.id,
+            username: user.username,
+            description: user.description,
+            profilePic: user.profilePic
+        }
+
+        res.status(201).json({ data: userOut })
     } catch (e) {
         console.log(e)
         res.status(500).json({ error: 'Failed to get user due to ' + e });
@@ -59,16 +71,31 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const userData: User = req.body
-        const userId = userData.id
+        const userData: UserDtoUpdate = req.body
+        const userId = parseInt(req.params.id)
 
-        const user = await userClient.update({
+        const matchingUser = await userClient.findUnique({
             where: {
-                id: userId
-            },
-            data: userData
+                id: userId,
+                username: userData.username
+            }
         })
-        res.status(201).json({ data: user })
+
+        if (matchingUser != null) {
+            const updatedUser = await userClient.update({
+                where: {
+                    id: matchingUser.id
+                },
+                data: {
+                    username: userData.username,
+                    description: userData.description,
+                    profilePic: userData.profilePic
+                }
+            })
+            return res.status(201).json({data: updatedUser});
+        }
+
+        res.status(400).json({ error: 'No matching user' })
     } catch (e) {
         console.log(e)
         res.status(500).json({ error: 'Failed to update user due to ' + e });
