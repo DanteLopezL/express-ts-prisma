@@ -4,10 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "migrate": "prisma mirgate dev",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/app.js"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
