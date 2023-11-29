@@ -1,7 +1,5 @@
 import { PrismaClient, User } from "@prisma/client";
-import { UserDtoIn } from "DTO/UserDtoIn";
-import { log } from "console";
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 
 const userClient = new PrismaClient().user
 const interestClient = new PrismaClient().interest
@@ -72,7 +70,7 @@ export const updateUser = async (req: Request, res: Response) => {
         })
         res.status(201).json({ data: user })
     } catch (e) {
-        log(e)
+        console.log(e)
         res.status(500).json({ error: 'Failed to update user due to ' + e });
     }
 }
@@ -88,7 +86,7 @@ export const deleteUser = async (req: Request, res: Response) => {
         })
         res.status(201).json({ data: user })
     } catch (e) {
-        log(e)
+        console.log(e)
         res.status(500).json({ error: 'Failed to delete user due to ' + e });
     }
 }
