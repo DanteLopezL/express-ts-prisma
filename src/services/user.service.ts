@@ -2,7 +2,7 @@ import { PrismaClient, User } from "@prisma/client";
 import UserDtoOut from "DTO/UserDtoOut";
 import UserDtoUpdate from "DTO/UserDTOUpdate"
 import { log } from "console";
-import { Request, Response, Router } from "express";
+import { Request, Response} from "express";
 
 const userClient = new PrismaClient().user
 const interestClient = new PrismaClient().interest
